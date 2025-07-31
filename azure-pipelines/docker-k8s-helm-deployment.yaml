@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  imageName: 'app3'
+  environment: 'blue'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - checkout: self
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Dockerserviceconnection'
+        repository: $(imageName)
+        command: 'buildAndPush'
+        Dockerfile: 'app3/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+
+- stage: Deploy
+  jobs:
+  - job: HelmDeploy
+    steps:
+    - script: |
+        helm upgrade --install app3-$(environment) app3/helm/app3 \
+          --namespace app3 \
+          --set image.tag=$(Build.BuildId) \
+          --set environment=$(environment) \
+          --set service.type=NodePort
+      displayName: 'Helm Blue-Green Deploy'

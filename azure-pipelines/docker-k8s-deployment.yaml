@@ -1,0 +1,54 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: 'app2'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - checkout: self
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Dockerserviceconnection'
+        repository: $(imageName)
+        command: 'buildAndPush'
+        Dockerfile: 'app2/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Create Namespace if not exists'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'k8sserviceconnection'
+        command: apply
+        useConfigurationFile: true
+        configuration: |
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: app2
+
+    - task: Kubernetes@1
+      displayName: 'Deploy to AKS'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'k8sserviceconnection'
+        command: apply
+        useConfigurationFile: true
+        configuration: |
+          app2/k8s/deploy-app2.yaml
+          app2/k8s/service-app2.yaml

@@ -1,0 +1,7 @@
+replicaCount: 2
+image:
+  repository: shivrajpatil1998.azurecr.io/app3
+  tag: latest
+service:
+  type: NodePort
+  port: 80
