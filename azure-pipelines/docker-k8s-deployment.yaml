@@ -42,19 +42,14 @@ stages:
         command: get
         arguments: 'nodes'
 
-    # Create namespace if not exists
-    - script: |
-        kubectl get ns app2 || kubectl create ns app2
-      displayName: 'Create Namespace if not exists'
-
-    # Deploy app manifests
     - task: Kubernetes@1
-      displayName: 'Deploy app2 Deployment and Service'
+      displayName: 'Deploy Namespace, Deployment, and Service'
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'Kubernetes Service Connection'
         command: apply
         useConfigurationFile: true
         configuration: |
+          $(System.DefaultWorkingDirectory)/app2/k8s/namespace.yaml
           $(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml
           $(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml
