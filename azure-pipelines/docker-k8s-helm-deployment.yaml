@@ -4,7 +4,7 @@ trigger:
       - main
 
 variables:
-  imageName: 'app3'
+  imageName: 'shivrajpatil1998/app3'
   environment: 'blue'
 
 stages:
@@ -21,6 +21,7 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'app3/Dockerfile'
         tags: |
+          #latest
           $(Build.BuildId)
 
 - stage: Deploy
