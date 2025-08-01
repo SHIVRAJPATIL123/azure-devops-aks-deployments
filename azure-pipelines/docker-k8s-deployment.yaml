@@ -50,6 +50,5 @@ stages:
         command: apply
         useConfigurationFile: true
         configuration: |
-          $(System.DefaultWorkingDirectory)/app2/k8s/deploy-namespace2.yaml
           $(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml
           $(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml
