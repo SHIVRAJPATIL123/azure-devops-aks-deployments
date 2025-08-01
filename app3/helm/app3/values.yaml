@@ -1,3 +1,4 @@
+namespace: app3
 replicaCount: 2
 environment: prod
 image:
@@ -6,3 +7,5 @@ image:
 service:
   type: NodePort
   port: 80
+
+  
