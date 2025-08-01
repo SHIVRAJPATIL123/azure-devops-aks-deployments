@@ -40,6 +40,8 @@ stages:
       runOnce:
         deploy:
           steps:
+          - checkout: self  
+
           - task: HelmDeploy@1
             displayName: Helm Upgrade
             inputs:
@@ -48,10 +50,11 @@ stages:
               namespace: 'app3'
               command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: 'app3/helm/app3'
+              chartPath: 'app3/helm/app3' 
               releaseName: 'app3-$(environment)'
               overrideValues: |
                 image.repository=$(imageName)
                 image.tag=latest
                 environment=$(environment)
                 service.type=NodePort
+
