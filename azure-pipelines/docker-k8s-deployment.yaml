@@ -36,7 +36,7 @@ stages:
       displayName: 'Create Namespace if not exists'
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'gkeServiceConnection'
+        kubernetesServiceEndpoint: 'Kubernetes Service Connection'
         command: apply
         useConfigurationFile: true
         configuration: |
