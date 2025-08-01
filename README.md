@@ -57,6 +57,56 @@ roleRef:
   name: full-access
   apiGroup: rbac.authorization.k8s.io
 
+for cluster 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: azure-devops
+  namespace: default
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azure-devops-token
+  namespace: default
+  annotations:
+    kubernetes.io/service-account.name: azure-devops
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: full-access
+rules:
+- apiGroups: ["", "apps", "batch", "extensions", "networking.k8s.io"]
+  resources:
+    - nodes
+    - pods
+    - services
+    - deployments
+    - replicasets
+    - configmaps
+    - secrets
+    - persistentvolumeclaims
+    - ingresses
+    - jobs
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: azure-devops-binding
+subjects:
+- kind: ServiceAccount
+  name: azure-devops
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: full-access
+  apiGroup: rbac.authorization.k8s.io
+
+
+
 
   kubectl apply -f devops-access-app3.yaml\n
   854  kubectl get serviceAccounts  -n app3 -o=jsonpath={.secrets[*].name}
