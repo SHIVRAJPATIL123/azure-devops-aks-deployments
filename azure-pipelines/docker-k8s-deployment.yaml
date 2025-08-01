@@ -40,8 +40,9 @@ stages:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'Kubernetes Service Connection'
         command: apply
-        useConfigurationFile: true
-        configuration: |
+        useConfigurationFile: false
+        arguments: '-f -'
+        inline: |
           apiVersion: v1
           kind: Namespace
           metadata:
