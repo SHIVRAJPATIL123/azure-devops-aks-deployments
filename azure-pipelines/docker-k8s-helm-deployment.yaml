@@ -5,7 +5,8 @@ trigger:
 
 variables:
   imageName: 'shivrajpatil1998/app3'
-  environment: 'blue'  
+  environment: 'blue' 
+  namespace: 'app3' 
 
 stages:
 # ----------- Build Stage ------------
@@ -47,7 +48,7 @@ stages:
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: 'k8sservice-connection'
-              namespace: 'app3'
+              namespace: $(namespace)
               command: 'upgrade'
               chartType: 'FilePath'
               chartPath: 'app3/helm/app3' 
@@ -57,4 +58,7 @@ stages:
                 image.tag=latest
                 environment=$(environment)
                 service.type=NodePort
+                namespace=$(namespace)
+              arguments: '--create-namespace'
+
 
