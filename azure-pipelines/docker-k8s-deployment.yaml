@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  imageName: 'app2'
+  imageName: 'shivrajpatil1998/app2'
 
 stages:
 - stage: Build
@@ -50,5 +50,5 @@ stages:
         command: apply
         useConfigurationFile: true
         configuration: |
-          app2/k8s/deploy-app2.yaml
-          app2/k8s/service-app2.yaml
+          $(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml
+          $(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml
