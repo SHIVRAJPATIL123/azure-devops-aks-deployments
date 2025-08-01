@@ -21,8 +21,8 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'app3/Dockerfile'
         tags: |
-          #latest
-          $(Build.BuildId)
+          latest
+          #$(Build.BuildId)
 
 - stage: Deploy
   jobs:
@@ -31,7 +31,7 @@ stages:
     - script: |
         helm upgrade --install app3-$(environment) app3/helm/app3 \
           --namespace app3 \
-          --set image.tag=$(Build.BuildId) \
+          --set image.tag=latest \
           --set environment=$(environment) \
           --set service.type=NodePort
       displayName: 'Helm Blue-Green Deploy'
