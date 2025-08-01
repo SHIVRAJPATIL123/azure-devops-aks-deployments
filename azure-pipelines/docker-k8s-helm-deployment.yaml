@@ -5,33 +5,53 @@ trigger:
 
 variables:
   imageName: 'shivrajpatil1998/app3'
-  environment: 'blue'
+  environment: 'blue'  # or 'green'
 
 stages:
+# ----------- Build Stage ------------
 - stage: Build
+  displayName: Build and Push Docker Image
   jobs:
-  - job: Build
+  - job: DockerBuild
+    pool:
+      vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
 
     - task: Docker@2
+      displayName: Build and Push Docker Image
       inputs:
         containerRegistry: 'Dockerserviceconnection'
         repository: $(imageName)
-        command: 'buildAndPush'
+        command: buildAndPush
         Dockerfile: 'app3/Dockerfile'
         tags: |
           latest
-          #$(Build.BuildId)
 
+# ----------- Deploy Stage ------------
 - stage: Deploy
+  displayName: Helm Blue-Green Deploy to AKS
+  dependsOn: Build
   jobs:
-  - job: HelmDeploy
-    steps:
-    - script: |
-        helm upgrade --install app3-$(environment) app3/helm/app3 \
-          --namespace app3 \
-          --set image.tag=latest \
-          --set environment=$(environment) \
-          --set service.type=NodePort
-      displayName: 'Helm Blue-Green Deploy'
+  - deployment: DeployApp
+    displayName: Deploy via Helm
+    environment: app3
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: HelmDeploy@1
+            displayName: Helm Upgrade
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: 'AKSServiceConnection'
+              namespace: 'app3'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: 'app3/helm/app3'
+              releaseName: 'app3-$(environment)'
+              overrideValues: |
+                image.repository=$(imageName)
+                image.tag=latest
+                environment=$(environment)
+                service.type=NodePort
