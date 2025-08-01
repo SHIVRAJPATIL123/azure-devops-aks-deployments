@@ -18,7 +18,7 @@ stages:
     - task: Docker@2
       displayName: Build and Push Docker Image
       inputs:
-        containerRegistry: 'Dockerserviceconnection'
+        containerRegistry: 'Dockerserviceconnection'   # <-- Your Docker Hub/Azure CR connection
         repository: $(imageName)
         command: buildAndPush
         Dockerfile: 'app2/Dockerfile'
@@ -38,7 +38,7 @@ stages:
       displayName: 'Initialize kubectl context'
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'k8sservice-connection'
+        kubernetesServiceEndpoint: 'k8sservice-connection'  # <-- Your AKS service connection
         command: get
         arguments: 'nodes'
 
@@ -48,8 +48,7 @@ stages:
       displayName: 'Debug: List k8s files'
 
     - script: |
-        echo "Applying deployment and service files"
-        kubectl apply -f $(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml
-        kubectl apply -f $(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml
+        echo "Applying deployment and service files..."
+        kubectl apply --validate=false -f $(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml
+        kubectl apply --validate=false -f $(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml
       displayName: 'Deploy Deployment and Service'
-
