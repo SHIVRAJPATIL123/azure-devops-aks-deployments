@@ -42,7 +42,9 @@ stages:
         command: get
         arguments: 'nodes'
 
-    - script: ls -R $(System.DefaultWorkingDirectory)
+    - script: |
+        echo "DEBUG: Listing repo contents..."
+        ls -R $(System.DefaultWorkingDirectory)
       displayName: 'List repo contents (debug)'
 
     - task: Kubernetes@1
@@ -50,6 +52,7 @@ stages:
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'k8sservice-connection'
+        namespace: 'app2'
         command: apply
         useConfigurationFile: true
         configuration: |
