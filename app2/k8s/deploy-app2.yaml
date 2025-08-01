@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: app2-container
-          image: shivrajpatil1998/app2:latest
+          image: shivrajpatil1998/app2:$(Build.BuildId)
           ports:
             - containerPort: 80
