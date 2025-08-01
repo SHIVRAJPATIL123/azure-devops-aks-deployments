@@ -35,19 +35,19 @@ stages:
     - checkout: self  
 
     - task: Kubernetes@1
-      displayName: 'Create Namespace if not exists'
+      displayName: 'Initialize kubectl context'
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'Kubernetes Service Connection'
-        command: apply
-        useConfigurationFile: false
-        arguments: '-f -'
-        inline: |
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: app2
+        command: get
+        arguments: 'nodes'
 
+    # Create namespace if not exists
+    - script: |
+        kubectl get ns app2 || kubectl create ns app2
+      displayName: 'Create Namespace if not exists'
+
+    # Deploy app manifests
     - task: Kubernetes@1
       displayName: 'Deploy app2 Deployment and Service'
       inputs:
