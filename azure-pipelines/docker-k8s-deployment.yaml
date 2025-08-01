@@ -18,24 +18,25 @@ stages:
 
     - task: Docker@2
       inputs:
-        containerRegistry: 'Dockerserviceconnection'     # Must be a Docker Hub connection
+        containerRegistry: 'Dockerserviceconnection'
         repository: $(imageName)
         command: 'buildAndPush'
         Dockerfile: 'app2/Dockerfile'
         tags: |
-          $(Build.BuildId)
+          latest
+          #$(Build.BuildId)
 
 - stage: Deploy
   jobs:
   - job: Deploy
     steps:
-    - checkout: self   # Important to access the YAML files
+    - checkout: self  
 
     - task: Kubernetes@1
       displayName: 'Create Namespace if not exists'
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'gkeServiceConnection'  # Change this to your GKE connection name
+        kubernetesServiceEndpoint: 'gkeServiceConnection'
         command: apply
         useConfigurationFile: true
         configuration: |
@@ -48,7 +49,7 @@ stages:
       displayName: 'Deploy to GKE'
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'gkeServiceConnection'  # Change this too
+        kubernetesServiceEndpoint: 'gkeServiceConnection'
         command: apply
         useConfigurationFile: true
         configuration: |
