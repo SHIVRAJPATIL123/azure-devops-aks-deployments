@@ -5,7 +5,7 @@ trigger:
 
 variables:
   imageName: 'shivrajpatil1998/app3'
-  environment: 'blue'  # or 'green'
+  environment: 'blue'  
 
 stages:
 # ----------- Build Stage ------------
