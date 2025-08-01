@@ -43,9 +43,15 @@ stages:
         arguments: 'nodes'
 
     - script: |
-        echo "DEBUG: Listing repo contents..."
+        echo "Repo structure:"
         ls -R $(System.DefaultWorkingDirectory)
       displayName: 'List repo contents (debug)'
+
+    - script: |
+        echo "Deploying files:"
+        echo "$(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml"
+        echo "$(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml"
+      displayName: 'Confirm file paths'
 
     - task: Kubernetes@1
       displayName: 'Deploy Namespace, Deployment, and Service'
