@@ -49,8 +49,8 @@ stages:
 
     - script: |
         echo "Validating deploy files exist..."
-        ls "$(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml"
-        ls "$(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml"
+        ls $(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml
+        ls $(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml
       displayName: 'Confirm file paths'
 
     - task: Kubernetes@1
@@ -61,7 +61,7 @@ stages:
         command: apply
         useConfigurationFile: true
         configuration: |
-          "$(System.DefaultWorkingDirectory)/app2/k8s/namespace.yaml"
+          $(System.DefaultWorkingDirectory)/app2/k8s/namespace.yaml
 
     - task: Kubernetes@1
       displayName: 'Deploy Deployment and Service'
@@ -72,5 +72,5 @@ stages:
         command: apply
         useConfigurationFile: true
         configuration: |
-          "$(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml"
-          "$(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml"
+          $(System.DefaultWorkingDirectory)/app2/k8s/deploy-app2.yaml
+          $(System.DefaultWorkingDirectory)/app2/k8s/service-app2.yaml
