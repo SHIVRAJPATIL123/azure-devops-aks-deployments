@@ -82,6 +82,7 @@ rules:
   resources:
     - nodes
     - pods
+    - namespaces
     - services
     - deployments
     - replicasets
