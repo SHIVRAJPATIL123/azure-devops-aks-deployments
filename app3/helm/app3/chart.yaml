@@ -3,7 +3,7 @@ name: app3
 version: 0.1.0
 replicaCount: 2
 image:
-  repository: <your-acr-name>.azurecr.io/app3
+  repository: shivrajpatil1998/app3
   tag: latest
 service:
   type: NodePort

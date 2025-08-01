@@ -7,7 +7,7 @@ spec:
   type: {{ .Values.service.type }}
   selector:
     app: {{ .Chart.Name }}
-    environment: {{ .Values.environment }}
+    environment: {{ default "env" .Values.environment }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: 80
