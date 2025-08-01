@@ -59,6 +59,6 @@ stages:
                 environment=$(environment)
                 service.type=NodePort
                 namespace=$(namespace)
-              arguments: '--install --wait --create-namespace' 
+              arguments: '--install --create-namespace'
 
 
