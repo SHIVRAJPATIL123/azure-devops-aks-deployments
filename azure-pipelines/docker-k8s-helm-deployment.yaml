@@ -46,7 +46,7 @@ stages:
             displayName: Helm Upgrade
             inputs:
               connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: 'k8sservice-connection'
               namespace: 'app3'
               command: 'upgrade'
               chartType: 'FilePath'
